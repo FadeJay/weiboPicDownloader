@@ -138,7 +138,7 @@ def progress(part, whole, percent = False):
 
 def request_fit(method, url, max_retry = 0, cookie = None, stream = False):
     headers = {
-        'User-Agent': 'Mozilla/5.0 (Linux; Android 9; Pixel 3 XL) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.80 Mobile Safari/537.36',
+        # 'User-Agent': 'Mozilla/5.0 (Linux; Android 9; Pixel 3 XL) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.80 Mobile Safari/537.36',
         'Cookie': cookie
     }
     return requests.request(method, url, headers = headers, stream = stream, verify = False)
@@ -338,6 +338,7 @@ def download(url, path, overwrite):
     try:
         with request_fit('GET', url, stream = True) as response:
             expected_size = int(response.headers['Content-length'])
+            assert expected_size > 0 and response.status_code == 200
             with open(path, 'wb') as f:
                 for chunk in response.iter_content(chunk_size=8192):
                     if chunk:
